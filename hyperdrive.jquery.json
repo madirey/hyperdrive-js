@@ -1,0 +1,38 @@
+{
+    "name": "hyperdrive-js",
+    "title": "hyperdrive-js",
+    "description": "AJAX prefetching",
+    "keywords": [
+        "jquery",
+        "ajax",
+        "cache",
+        "performance",
+        "optimization"
+    ],
+    "version": "0.0.1",
+    "author": {
+        "name": "Matt Caldwell",
+        "email": "matt.caldwell@gmail.com",
+        "url": "https://github.com/mattcaldwell"
+    },
+    "maintainers": [
+        {
+            "name": "Matt Caldwell",
+            "email": "matt.caldwell@gmail.com",
+            "url": "https://github.com/mattcaldwell"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://raw.github.com/mattcaldwell/hyperdrive-js/master/LICENSE/"
+        }
+    ],
+    "bugs": "https://github.com/mattcaldwell/hyperdrive-js/issues/",
+    "homepage": "https://github.com/mattcaldwell/hyperdrive-js/",
+    "docs": "https://github.com/mattcaldwell/hyperdrive-js#readme",
+    "download": "https://github.com/mattcaldwell/hyperdrive-js/archive/master.zip",
+    "dependencies": {
+        "jquery": ">=1.4"
+    }
+}
