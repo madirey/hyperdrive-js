@@ -40,34 +40,65 @@
         pluginId   = 'jq-plugin_' + pluginName,
         defaults   = {
 
-    };
+        };
 
     // The actual plugin constructor
     var Plugin = function(element, options) {
-        this.element = element;
-        // jQuery has an extend method which merges the contents of two or
-        // more objects, storing the result in the first object. The first object
-        // is generally empty as we don't want to alter the default options for
-        // future instances of the plugin
+        this.el = element;
+        this.$el = $(element);
         this.options = $.extend({}, defaults, options);
         this._defaults = defaults;
         this._name = pluginName;
+
+        // initialize plugin
         this.init();
+
+        // set the plugin state to "initialized"
+        Plugin.static.initialized = true;
     };
 
     Plugin.prototype = {
-        init: function () {
-            // Place initialization logic here
-            // You already have access to the DOM element and
-            // the options via the instance, e.g. this.element
-            // and this.options
-            // you can add more functions like the one below and
-            // call them like so: this.yourOtherFunction(this.element, this.options).
-            console.log("xD");
+        init: function() {
+            this.prefetch();
+            this.interceptAjax();
         },
-        yourOtherFunction: function () {
-            // some logic
-        }
+        prefetch: function() {
+            var url          = this.$el.attr('href'),
+                responseObj  = {};
+
+            $.ajax({
+                url: url,
+                beforeSend: function (jqXHR, settings) {
+                    // hold on to the 'url' so we can use it later
+                    jqXHR.url = settings.url;
+                }
+            })
+            .done(function (data, textStatus, jqXHR) {
+                responseObj.data = data;
+                responseObj.textStatus = textStatus;
+                responseObj.jqXHR = jqXHR;
+                localStorage['hjs-data-' + jqXHR.url] = data;
+            });
+        },
+        interceptAjax: function() {
+            // be sure to only create the handler once
+            if(!Plugin.static.initialized) {
+                var urlIndex, url, content;
+                $(document).ajaxSend(function(evt, jqXHR, settings) {
+                    data = localStorage['hjs-data-' + settings.url];
+                    if(data !== undefined) {
+                        // we have prefetched the content ... display it
+                        jqXHR.done(data);
+                        jqXHR.abort();
+                    }
+                });
+            }
+        },
+    };
+
+    // Class variables
+    Plugin.static = {
+        initialized: false
     };
 
     // A really lightweight plugin wrapper around the constructor,
